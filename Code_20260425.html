@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>航天知识小问答</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            background:#0f172a;
+            color:#f1f5f9;
+            font-family:"微软雅黑",sans-serif;
+            padding:20px;
+        }
+        .box{
+            max-width:700px;
+            margin:0 auto;
+            background:rgba(255,255,255,0.06);
+            border-radius:16px;
+            padding:25px;
+        }
+        h1{
+            text-align:center;
+            color:#38bdf8;
+            margin-bottom:30px;
+            font-size:26px;
+        }
+        .q-item{
+            background:rgba(255,255,255,0.08);
+            border-radius:12px;
+            padding:18px;
+            margin-bottom:18px;
+        }
+        .q-title{
+            font-size:16px;
+            margin-bottom:12px;
+            line-height:1.6;
+        }
+        .opt label{
+            display:block;
+            margin:8px 0;
+            padding:8px 10px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+        .opt label:hover{
+            background:rgba(56,189,248,0.15);
+        }
+        button{
+            width:100%;
+            background:#0ea5e9;
+            border:none;
+            color:#fff;
+            font-size:17px;
+            padding:14px;
+            border-radius:10px;
+            margin-top:10px;
+            cursor:pointer;
+        }
+        button:hover{background:#0284c7;}
+        .result{
+            margin-top:20px;
+            padding:15px;
+            border-radius:10px;
+            text-align:center;
+            font-size:18px;
+            font-weight:bold;
+        }
+        .right{color:#22c55e;}
+        .wrong{color:#f87171;}
+        .explain{
+            margin-top:10px;
+            padding:10px;
+            background:rgba(255,255,255,0.05);
+            border-radius:8px;
+            font-size:14px;
+            color:#cbd5e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🚀 航天知识小问答</h1>
+
+        <div class="q-item">
+            <div class="q-title">1. 我国C919大型客机首飞日期是？</div>
+            <div class="opt">
+                <label><input type="radio" name="q1" value="A"> A. 2015年11月2日</label>
+                <label><input type="radio" name="q1" value="B"> B. 2017年5月5日</label>
+                <label><input type="radio" name="q1" value="C"> C. 2022年12月9日</label>
+                <label><input type="radio" name="q1" value="D"> D. 2023年5月28日</label>
+            </div>
+            <div class="explain" id="exp1" style="display:none;">正确答案：B｜解析：C919于2017年5月5日在上海圆满完成首次试飞。</div>
+        </div>
+
+        <div class="q-item">
+            <div class="q-title">2. 属于我国自主研制的战斗机是？</div>
+            <div class="opt">
+                <label><input type="radio" name="q2" value="A"> A. 苏—57</label>
+                <label><input type="radio" name="q2" value="B"> B. F—15</label>
+                <label><input type="radio" name="q2" value="C"> C. 歼—35A</label>
+                <label><input type="radio" name="q2" value="D"> D. F—35</label>
+            </div>
+            <div class="explain" id="exp2" style="display:none;">正确答案：C｜解析：歼-35A是中国新一代隐身舰载战斗机，完全自主研发。</div>
+        </div>
+
+        <div class="q-item">
+            <div class="q-title">3. 钱学森哪一年回国？</div>
+            <div class="opt">
+                <label><input type="radio" name="q3" value="A"> A. 1949年</label>
+                <label><input type="radio" name="q3" value="B"> B. 1955年</label>
+                <label><input type="radio" name="q3" value="C"> C. 1964年</label>
+                <label><input type="radio" name="q3" value="D"> D. 1970年</label>
+            </div>
+            <div class="explain" id="exp3" style="display:none;">正确答案：B｜解析：1955年钱学森冲破阻碍回国，奠定我国航天事业基础。</div>
+        </div>
+
+        <div class="q-item">
+            <div class="q-title">4. 中国“卫星之父”是？</div>
+            <div class="opt">
+                <label><input type="radio" name="q4" value="A"> A. 孙家栋</label>
+                <label><input type="radio" name="q4" value="B"> B. 钱学森</label>
+                <label><input type="radio" name="q4" value="C"> C. 杨嘉墀</label>
+                <label><input type="radio" name="q4" value="D"> D. 赵九章</label>
+            </div>
+            <div class="explain" id="exp4" style="display:none;">正确答案：A｜解析：孙家栋主持研制我国第一颗人造卫星，被誉为卫星之父。</div>
+        </div>
+
+        <div class="q-item">
+            <div class="q-title">5. 公式 F = -F 对应原理是？</div>
+            <div class="opt">
+                <label><input type="radio" name="q5" value="A"> A. 作用力与反作用力</label>
+                <label><input type="radio" name="q5" value="B"> B. 温度传热</label>
+                <label><input type="radio" name="q5" value="C"> C. 压力传递</label>
+                <label><input type="radio" name="q5" value="D"> D. 风洞</label>
+            </div>
+            <div class="explain" id="exp5" style="display:none;">正确答案：A｜解析：牛顿第三定律，两个物体相互作用力大小相等、方向相反。</div>
+        </div>
+
+        <button onclick="submitQuiz()">提交答题 查看结果</button>
+        <div class="result" id="res"></div>
+    </div>
+
+    <script>
+        // 标准答案
+        const ans = {
+            q1:"B",q2:"C",q3:"B",q4:"A",q5:"A"
+        };
+
+        function submitQuiz(){
+            let score = 0;
+            // 先全部隐藏解析
+            for(let i=1;i<=5;i++){
+                document.getElementById("exp"+i).style.display = "none";
+            }
+
+            for(let i=1;i<=5;i++){
+                let name = "q"+i;
+                let sel = document.querySelector('input[name="'+name+'"]:checked');
+                if(sel){
+                    if(sel.value === ans[name]){
+                        score++;
+                    }
+                    // 显示本题解析
+                    document.getElementById("exp"+i).style.display = "block";
+                }
+            }
+
+            let resText = "";
+            // 满分专属文案
+            if(score === 5){
+                resText = "🎉 太棒了！你答对了 5/5 题，是个航天小达人！";
+                document.getElementById("res").className = "result right";
+            }else if(score >= 3){
+                resText = `👍 不错！你答对了 ${score}/5 题`;
+                document.getElementById("res").className = "result right";
+            }else{
+                resText = `💪 你答对了 ${score}/5 题，再多了解一下航天知识吧！`;
+                document.getElementById("res").className = "result wrong";
+            }
+            document.getElementById("res").innerText = resText;
+        }
+    </script>
+</body>
+</html>
