@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀扫码答题-追寻航天精神（钱学森馆研学答题）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", system-ui, sans-serif;
+        }
+        body {
+            background-color: #f0f7ff;
+            color: #0a244b;
+            padding: 16px;
+        }
+        .main-wrap {
+            max-width: 880px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px #b3d4f8;
+            overflow: hidden;
+        }
+        .page-header {
+            background: linear-gradient(130deg, #0042b8, #1566ff);
+            color: #fff;
+            padding: 28px 20px;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .page-header p {
+            opacity: 0.92;
+            font-size: 15px;
+        }
+        .content-box {
+            padding: 26px;
+        }
+        .intro-tip {
+            background: #e8f2ff;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+        .chapter-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #003b8c;
+            margin: 40px 0 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #1665ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .q-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #0047bb;
+            border-left: 4px solid #1665ff;
+            padding-left: 12px;
+            margin: 26px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .text-desc {
+            line-height: 1.75;
+            margin-bottom: 14px;
+            color: #102c54;
+        }
+        .question-item {
+            background: #f7fbff;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+        }
+        input[type="text"] {
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px 14px;
+            border: 1px solid #94b9ee;
+            border-radius: 7px;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+        /* 错题高亮样式 */
+        input[type="text"].error-border {
+            border: 2px solid #f03e3e;
+            background: #fff5f5;
+        }
+        textarea {
+            width: 100%;
+            min-height: 115px;
+            margin-top: 8px;
+            padding: 11px 14px;
+            border: 1px solid #94b9ee;
+            border-radius: 7px;
+            font-size: 15px;
+            resize: vertical;
+        }
+        .radio-line {
+            margin: 10px 0;
+        }
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            margin-top: 45px;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #submitBtn {
+            background: #1665ff;
+            color: white;
+        }
+        #ansBtn {
+            background: #0042b8;
+            color: white;
+        }
+        #resetBtn {
+            background: #c6ddfc;
+            color: #002a5c;
+        }
+        .answer-panel {
+            margin-top: 35px;
+            padding: 22px;
+            background: #e0edff;
+            border-radius: 10px;
+            display: none;
+        }
+        .answer-panel h3 {
+            color: #003680;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .answer-panel p {
+            line-height: 1.85;
+        }
+        .space-icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        .score-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            display: none;
+            border: 2px solid #1665ff;
+        }
+        .score-panel h3 {
+            color: #003b8c;
+            margin-bottom: 10px;
+        }
+        .star-level {
+            font-size: 32px;
+            margin: 10px 0;
+            letter-spacing: 6px;
+        }
+        .correct-item {
+            color: #009944;
+        }
+        .wrong-item {
+            color: #dd3333;
+        }
+        .scoreEval {
+            margin-top:15px;
+            font-size:18px;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+<div class="main-wrap">
+    <div class="page-header">
+        <h1>
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 2L9.5 8.5L2 9.5L7 14L5.5 21.5L12 18L18.5 21.5L17 14L22 9.5L14.5 8.5L12 2Z"/></svg>
+            扫码答题-追寻航天精神
+        </h1>
+        <p>钱学森馆研学答题页面（提交自动判分、星级评价、错题标红）</p>
+    </div>
+    <div class="content-box">
+        <div class="intro-tip">
+            各位同学，欢迎来到钱学森空天馆研学答题！<br>
+            请认真完成全部题目，提交后系统自动判分、给出星级评价，答错题目输入框会标红提醒，也可查看完整标准答案巩固航天知识。
+        </div>
+
+        <!-- 第一篇章 -->
+        <div class="chapter-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 2L9.5 8.5L2 9.5L7 14L5.5 21.5L12 18L18.5 21.5L17 14L22 9.5L14.5 8.5L12 2Z"/></svg>
+            第一篇章：追寻精神之光——谁在指引我们走向星辰大海？
+        </div>
+        <div class="text-desc">
+            他们曾隐于大漠，仰望星河；用无声的坚守，点燃了中国的航天之光。请走近第一展区，读一读那些被岁月珍藏的名字——两弹一星元勋，把元勋与他们的典型事迹配对。将字母填入对应横线。<br><br>
+            事迹选项：<br>
+            A. 以身许国，倾尽心血研制原子弹氢弹。<br>
+            B. “中国航天之父”，奠定我国导弹、航天事业基础。<br>
+            C. “氢弹之父”，隐姓埋名 28 年投身核武器事业。<br>
+            D. “卫星之父”，东方红一号总设计师、北斗开创者。<br>
+            E. 为国防科研以身殉国，用生命守护绝密科研资料。
+        </div>
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            第一题 两弹一星元勋配对填空
+        </div>
+        <div class="question-item">
+            <p>1. 于敏对应的字母：</p>
+            <input type="text" id="q1">
+        </div>
+        <div class="question-item">
+            <p>2. 邓稼先对应的字母：</p>
+            <input type="text" id="q2">
+        </div>
+        <div class="question-item">
+            <p>3. 孙家栋对应的字母：</p>
+            <input type="text" id="q3">
+        </div>
+        <div class="question-item">
+            <p>4. 郭永怀对应的字母：</p>
+            <input type="text" id="q4">
+        </div>
+        <div class="question-item">
+            <p>5. 钱学森对应的字母：</p>
+            <input type="text" id="q5">
+        </div>
+
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M15 3h4v4m-2 2l-5 5-5-5M12 12v9"/></svg>
+            第二题 展厅展品位置【找一找】填空题
+        </div>
+        <div class="question-item">
+            <p>(1)东方红一号在展厅的（）区。</p>
+            <input type="text" id="q6">
+        </div>
+        <div class="question-item">
+            <p>(2)北斗组网模型在展厅的（）区。</p>
+            <input type="text" id="q7">
+        </div>
+
+        <div class="text-desc">
+            刚才我们认识了23位两弹一星元勋——他们是中国航天的群星图。但在这些名字中，有一个人的经历最让人动容：他被美国关了5年，美国海军次长说“一个他，至少顶5个师”，他却拼了命也要回到一穷二白的祖国，他就是——钱学森。<br>
+            现在，请走进第二展区——精神之光，去读一读钱老的故事，完成下面的挑战。
+        </div>
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+            第三题 钱学森人生大事时间排序（单选题）
+        </div>
+        <div class="text-desc">事件：①领导导弹航天 ②美国软禁5年 ③克利夫兰总统号归国 ④赴美深造 ⑤钱永刚重走归国路 ⑥东方红一号发射</div>
+        <div class="question-item">
+            <div class="radio-line">
+                <input type="radio" name="timeSort" value="A" id="optA">
+                <label for="optA">A.④→②→③→①→⑥→⑤</label>
+            </div>
+            <div class="radio-line">
+                <input type="radio" name="timeSort" value="B" id="optB">
+                <label for="optB">B.②→④→③→①→⑥→⑤</label>
+            </div>
+            <div class="radio-line">
+                <input type="radio" name="timeSort" value="C" id="optC">
+                <label for="optC">C.④→③→②→①→⑤→⑥</label>
+            </div>
+            <div class="radio-line">
+                <input type="radio" name="timeSort" value="D" id="optD">
+                <label for="optD">D.④→②→①→③→⑥→⑤</label>
+            </div>
+        </div>
+
+        <!-- 第二篇章 -->
+        <div class="chapter-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 16.5c-1.5 0-2.71-1.19-2.71-2.69 0-1.23.83-2.25 1.94-2.55V11c0-1.1.9-2 2-2s2 .9 2 2v.26c1.11.3 1.94 1.32 1.94 2.55 0 1.5-1.21 2.69-2.71 2.69zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            第二篇章：打开原理之钥——飞行为什么能发生？
+        </div>
+        <div class="text-desc">
+            飞机那么重，为什么能稳稳飞在天上？火箭没有翅膀，又是如何冲出大气层的？答案就藏在空气里。接下来，观看高年级学长学姐带来的实验秀，参观第四展厅“原理诠释”，一起揭开“飞行的秘密”。
+        </div>
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5-8 5v2l8-2.5L21 16z"/></svg>
+            第四题 伯努利原理填空-飞机为什么能飞起来？
+        </div>
+        <div class="question-item">
+            <p>(1)向两个气球中间吹气时，中间的空气流动变___，压力变___；两边的空气流动___，压力变___；于是，外面的压力把两张纸推向中间。这说明：空气流动越快，压力越___。（多词用顿号隔开）</p>
+            <input type="text" id="q8">
+        </div>
+        <div class="question-item">
+            <p>(2)飞机机翼横截面形状为：</p>
+            <input type="text" id="q9">
+        </div>
+
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 2L9.5 8.5L2 9.5L7 14L5.5 21.5L12 18L18.5 21.5L17 14L22 9.5L14.5 8.5L12 2Z"/></svg>
+            第五题 作用力与反作用力填空-火箭升空的力从哪来？
+        </div>
+        <div class="question-item">
+            <p>【原理揭秘】气球向___推动空气，空气对气球产生一个向___的推力；这就是作用力与反作用力。（两词顿号分隔）</p>
+            <input type="text" id="q10">
+        </div>
+        <div class="question-item">
+            <p>【原理应用】作用力与反作用力被运用于火箭发射中，火箭向___喷出高温高压气体，气体给火箭一个向___的推力，使火箭升空。（两词顿号分隔）</p>
+            <input type="text" id="q11">
+        </div>
+
+        <!-- 第三篇章 -->
+        <div class="chapter-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            第三篇章：走近大国重器——我国有哪些飞天入海的钢铁脊梁？
+        </div>
+        <div class="text-desc">
+            从两弹一星元勋们的筚路蓝缕，到今天一枚枚火箭腾空而起、一架架战机守卫蓝天、一艘艘航母驶向深蓝——几代人的奋斗，让中国站上了世界航空航天的高地。现在，请你自主参观场馆，走近这些大国重器。<br>
+            任务：寻找空天力量，请在场馆中仔细观察，找出火箭、战斗机、导弹、航空母舰、卫星这五类展品，将你找到的具体型号名称填入下方。
+        </div>
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2h8z"/></svg>
+            第六题 大国重器知识填空
+        </div>
+        <div class="question-item">
+            <p>(1)被称为“金牌火箭”的型号是：</p>
+            <input type="text" id="q12">
+        </div>
+        <div class="question-item">
+            <p>(2)中国自主研发首款舰载战斗机是：</p>
+            <input type="text" id="q13">
+        </div>
+        <div class="question-item">
+            <p>(3)适配舰载战斗机的导弹型号是：</p>
+            <input type="text" id="q14">
+        </div>
+        <div class="question-item">
+            <p>(4)辽宁舰舰载机起飞方式___；福建舰起飞方式___（顿号分隔）</p>
+            <input type="text" id="q15">
+        </div>
+        <div class="question-item">
+            <p>(5)我国第一颗拍摄月球表面照片的卫星是：</p>
+            <input type="text" id="q16">
+        </div>
+
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            第七题 开放简答：大国重器解说词
+        </div>
+        <div class="question-item">
+            <p>请挑选火箭/战机/航母/卫星任意一款大国重器，撰写50字左右解说词，向同学介绍它。</p>
+            <textarea id="q17"></textarea>
+        </div>
+
+        <div class="q-title">
+            <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            第八题 开放简答：参观空天馆研学感想
+        </div>
+        <div class="question-item">
+            <p>结合两弹一星元勋故事、飞行实验、大国重器展品，写下本次研学收获与感悟，字数150字左右。</p>
+            <textarea id="q18"></textarea>
+        </div>
+
+        <!-- 功能按钮 -->
+        <div class="btn-group">
+            <button id="submitBtn">提交作答（自动判分评价）</button>
+            <button id="ansBtn">查看参考答案</button>
+            <button id="resetBtn">清空全部填写</button>
+        </div>
+
+        <!-- 判分结果面板 -->
+        <div class="score-panel" id="scoreBox">
+            <h3>📊 你的答题判分结果与评价</h3>
+            <div class="star-level" id="starDom"></div>
+            <div id="scoreDetail"></div>
+            <div class="scoreEval" id="scoreEval"></div>
+        </div>
+
+        <!-- 标准答案面板（已更新展区答案） -->
+        <div class="answer-panel" id="answerBox">
+            <h3>
+                <svg class="space-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                全套参考答案（标注双可选答案）
+            </h3>
+            <p>1.于敏：C  2.邓稼先：A  3.孙家栋：D  4.郭永怀：E  5.钱学森：B</p>
+            <p>6.东方红一号展区：<strong>第四展区</strong></p>
+            <p>7.北斗组网模型展区：<strong>第二展区</strong></p>
+            <p>8.钱学森排序单选：A</p>
+            <p>9.伯努利原理：快、小、慢、大、小</p>
+            <p>10.机翼形状：上凸下平</p>
+            <p>11.气球推力：下、上</p>
+            <p>12.火箭发射原理：下、上</p>
+            <p>13.金牌火箭：<strong>CZ-2D、CZ-4B 填写任意一个均正确</strong></p>
+            <p>14.舰载战斗机：歼-15</p>
+            <p>15.舰载导弹：<strong>PL-12、PL-15 填写任意一个均正确</strong></p>
+            <p>16.航母起飞方式：滑跃起飞、弹射起飞</p>
+            <p>17.探月卫星：嫦娥一号</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 标准答案库
+    const answerKey = {
+        q1: "C", q2: "A", q3: "D", q4: "E", q5: "B",
+        q6: "第四展区", q7: "第二展区",
+        timeSort: "A",
+        q8: "快、小、慢、大、小", q9: "上凸下平",
+        q10: "下、上", q11: "下、上",
+        q12: ["CZ-2D", "CZ-4B"],
+        q13: "歼-15",
+        q14: ["PL-12", "PL-15"],
+        q15: "滑跃起飞、弹射起飞",
+        q16: "嫦娥一号"
+    };
+    const objQuestions = ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q13","q15","q16"];
+    const multiAnsQues = {q12:true, q14:true};
+    const allInputIds = [...objQuestions, "q12", "q14"];
+
+    // 清空所有错题标红
+    function clearErrorBorder(){
+        allInputIds.forEach(id=>{
+            document.getElementById(id).classList.remove("error-border");
+        })
+    }
+
+    // 提交判分逻辑
+    document.getElementById('submitBtn').addEventListener('click', () => {
+        clearErrorBorder();
+        let score = 0;
+        let detailHtml = "";
+        // 普通填空
+        objQuestions.forEach(qid => {
+            const inputDom = document.getElementById(qid);
+            const userAns = inputDom.value.trim();
+            const stdAns = answerKey[qid];
+            if(userAns === stdAns){
+                score++;
+                detailHtml += `<p class="correct-item">✅ ${qid} 回答正确</p>`;
+            }else{
+                inputDom.classList.add("error-border");
+                detailHtml += `<p class="wrong-item">❌ ${qid} 回答错误，标准答案：${stdAns}</p>`;
+            }
+        });
+        // 多答案题目 q12 q14
+        ["q12","q14"].forEach(qid=>{
+            const inputDom = document.getElementById(qid);
+            const userAns = inputDom.value.trim();
+            const allowAns = answerKey[qid];
+            if(allowAns.includes(userAns)){
+                score++;
+                detailHtml += `<p class="correct-item">✅ ${qid} 回答正确</p>`;
+            }else{
+                inputDom.classList.add("error-border");
+                detailHtml += `<p class="wrong-item">❌ ${qid} 回答错误，标准答案可选：${allowAns.join(" / ")}</p>`;
+            }
+        });
+        // 单选排序题
+        const radioSel = document.querySelector('input[name="timeSort"]:checked');
+        if(radioSel && radioSel.value === answerKey.timeSort){
+            score++;
+            detailHtml += `<p class="correct-item">✅ 第三题排序单选回答正确</p>`;
+        }else{
+            detailHtml += `<p class="wrong-item">❌ 第三题排序单选回答错误，标准答案：${answerKey.timeSort}</p>`;
+        }
+
+        // 星级生成
+        const fullScore = 16;
+        const rate = score / fullScore;
+        let starText = "";
+        let evalText = "";
+        if(rate === 1){
+            starText = "⭐⭐⭐⭐⭐";
+            evalText = `🎉 满分${fullScore}分！五星航天小达人，知识点全部掌握，太优秀！`;
+        }else if(rate >= 0.8){
+            starText = "⭐⭐⭐⭐";
+            evalText = `🌟 四星优秀！得分${score}/${fullScore}，仅少量错题，复习后就能满分！`;
+        }else if(rate >= 0.6){
+            starText = "⭐⭐⭐";
+            evalText = `👍 三星合格！得分${score}/${fullScore}，基础知识点基本掌握，错题重点巩固。`;
+        }else if(rate >= 0.35){
+            starText = "⭐⭐";
+            evalText = `📚 两星待提升！得分${score}/${fullScore}，建议对照参考答案系统学习航天知识。`;
+        }else{
+            starText = "⭐";
+            evalText = `✍ 一星需努力！得分${score}/${fullScore}，重新参观展馆结合答案梳理全部内容。`;
+        }
+
+        // 渲染面板
+        document.getElementById('starDom').innerText = starText;
+        document.getElementById('scoreDetail').innerHTML = detailHtml;
+        document.getElementById('scoreEval').innerText = evalText;
+        document.getElementById('scoreBox').style.display = 'block';
+        document.getElementById('answerBox').style.display = 'none';
+    })
+
+    // 查看答案
+    document.getElementById('ansBtn').addEventListener('click', () => {
+        document.getElementById('answerBox').style.display = 'block';
+        document.getElementById('scoreBox').style.display = 'none';
+    })
+
+    // 清空全部
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        clearErrorBorder();
+        document.querySelectorAll('input[type="text"]').forEach(item => item.value = '');
+        document.querySelectorAll('textarea').forEach(item => item.value = '');
+        document.querySelectorAll('input[type="radio"]').forEach(item => item.checked = false);
+        document.getElementById('answerBox').style.display = 'none';
+        document.getElementById('scoreBox').style.display = 'none';
+    })
+</script>
+</body>
+</html>
